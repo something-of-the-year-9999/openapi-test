@@ -95,10 +95,6 @@ tags:
   - name: users
     description: Operates on multi users.
 paths:
-  /hello:
-    $ref: "./paths/hello.yml#/Hello"
-  /trace:
-    $ref: "./paths/trace.yml#/Trace"
   /cookie/login:
     $ref: "./paths/cookie.yml#/CookieLogin"
   /cookie/logout:
