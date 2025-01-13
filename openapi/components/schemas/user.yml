@@ -1,0 +1,92 @@
+Id:
+  allOf:
+    - $ref: "./common.yml#/Id"
+    - description: User ID
+Name:
+  description: User Name
+  type: string
+  nullable: false
+  example: "Jane Smith"
+EMail:
+  allOf:
+    - $ref: "./common.yml#/EMail"
+    - description: User E-Mail Address
+    - nullable: false
+    - example: "jane.smith@example.com"
+Password:
+  allOf:
+    - $ref: "./common.yml#/Password"
+    - description: User Password
+    - nullable: false
+Has2fa:
+  description: Indicates if the user has enabled 2-Factor Authentication.
+  type: boolean
+  nullable: false
+  default: false
+  example: false
+Gender:
+  description: User Gender
+  type: string
+  enum:
+    - male
+    - female
+    - other
+    - not_disclosed
+  nullable: true
+  example: "female"
+Height:
+  description: User Height in Centimeter
+  type: number
+  format: float
+  minimum: 0.0
+  exclusiveMinimum: true
+  nullable: true
+  example: 162.1
+Weight:
+  description: User Weight in Kilograms
+  type: number
+  format: float
+  minimum: 0.0
+  exclusiveMinimum: true
+  nullable: true
+  example: 70.4
+RegistrationDateTime:
+  allOf:
+    - $ref: "./common.yml#/DateTime"
+    - description: The date-time when the user registered.
+    - nullable: false
+    - example: "2022-05-22T22:05:22-05:00"
+
+User:
+  title: User
+  type: object
+  properties:
+    id:
+      allOf:
+        - $ref: "#/Id"
+        - readOnly: true
+    name:
+      $ref: "#/Name"
+    email:
+      $ref: "#/EMail"
+    password:
+      $ref: "#/Password"
+    has_2fa:
+      $ref: "#/Has2fa"
+    dob:
+      allOf:
+        - $ref: "./common.yml#/Date"
+        - description: User Date of Birth
+        - nullable: true
+        - example: "1999-12-31"
+    gender:
+      $ref: "#/Gender"
+    height:
+      $ref: "#/Height"
+    weight:
+      $ref: "#/Weight"
+    registration_date_time:
+      allOf:
+        - $ref: "#/RegistrationDateTime"
+        - readOnly: true
+  additionalProperties: false

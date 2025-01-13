@@ -1,0 +1,70 @@
+CookieLogin:
+  # /cookie/login
+  summary: Login Endpoint
+  post:
+    tags:
+      - cookie
+    summary: Login Request
+    description: |-
+        Authenticates the user and initiates a session by setting a `Set-Cookie` header containing the `SID` cookie-name.  
+        This cookie holds the Session ID, which is required for authenticating subsequent requests.  
+        A successful response returns a 200 OK status with no response body, indicating the session cookie has been set.
+    operationId: postLogin
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                $ref: "../components/schemas/user.yml#/EMail"
+              password:
+                $ref: "../components/schemas/user.yml#/Password"
+            required:
+              - email
+              - password
+            additionalProperties: false
+    responses:
+      "200":
+        description: OK
+        headers:
+          Set-Cookie:
+            description: This header is used to send cookies from the server to the user agent.
+            required: true
+            schema:
+              type: string
+              nullable: false
+              example: >-
+                SID=31d4d96e407aad42;
+                Expires=Sat, 16 Nov 2024 08:49:37 GMT;
+                Path=/;
+                Domain=example.com;
+                Secure;
+                HttpOnly
+              externalDocs:
+                description: RFC 6265 - HTTP State Management Mechanism
+                url: https://datatracker.ietf.org/doc/html/rfc6265
+      "400":
+        $ref: "../components/responses/error.yml#/400"
+      "401":
+        $ref: "../components/responses/error.yml#/401"
+
+CookieLogout:
+  # /cookie/logout
+  summary: Logout Endpoint
+  post:
+    tags:
+      - cookie
+    summary: Logout Request
+    description: |-
+        Logout the authenticated user by invalidating the session.  
+        Return a 401 error if the user is not login.
+    operationId: postLogout
+    security:
+      - CookieAuth: []
+    responses:
+      "204":
+        description: No Content
+      "401":
+        $ref: "../components/responses/error.yml#/401"

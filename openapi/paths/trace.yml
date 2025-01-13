@@ -1,0 +1,32 @@
+Trace:
+  # /trace
+  # The use of this endpoint is not recommended in publicly accessible web services or environments exposed to external access.
+  summary: Diagnostic Endpoint
+  description: |-
+      This endpoint allows for diagnostic requests to trace the route of a request from the client to the server.  
+      It can be used to verify network paths and intermediary proxies but should be restricted to authorized users for security reasons.
+  trace:
+    summary: Diagnostic Request
+    description: |-
+        This request is used to send back the received request to the client, allowing the user to trace the path of the request.  
+        This can be useful for debugging purposes, such as detecting network issues or validating proxies.  
+        However, it should be used cautiously as the request headers and body will be mirrored in the response, potentially exposing sensitive data.
+    externalDocs:
+      description: RFC 9110 - HTTP Semantics
+      url: https://datatracker.ietf.org/doc/html/rfc9110#section-9.3.8
+    operationId: trace
+    responses:
+      "200":
+        description: OK
+        content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request:
+                    description: The Echoed Request Sent by the Client
+                    type: string
+                    example: "GET /trace HTTP/1.1\nHost: example.com\nUser-Agent: curl/8.10.1\nAccept: */*"
+                additionalProperties: false
+      "405":
+        $ref: "../components/responses/error.yml#/405"

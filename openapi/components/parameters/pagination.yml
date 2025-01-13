@@ -1,0 +1,22 @@
+Page:
+  name: page
+  in: query
+  description: Page number.
+  required: true
+  schema:
+    type: integer
+    format: int32
+    nullable: false
+    minimum: 1
+    example: 1
+PerPage:
+  name: per_page
+  in: query
+  description: The number of items to return per page.
+  required: true
+  schema:
+    type: integer
+    format: int32
+    nullable: false
+    minimum: 1
+    example: 10

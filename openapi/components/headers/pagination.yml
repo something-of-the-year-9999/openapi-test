@@ -1,0 +1,16 @@
+Pagination:
+  # This object MUST be mapped to the "Link" header.
+  description: Contains pagination links.
+  required: true
+  schema:
+    type: string
+    nullable: false
+    example: >-
+      <https://example.com/endpoint?page=1&per_page=100>; rel="first",
+      <https://example.com/endpoint?page=4&per_page=100>; rel="prev",
+      <https://example.com/endpoint?page=5&per_page=100>; rel="self",
+      <https://example.com/endpoint?page=6&per_page=100>; rel="next",
+      <https://example.com/endpoint?page=10&per_page=100>; rel="last"
+    externalDocs:
+      description: RFC 8288 - Web Linking
+      url: https://datatracker.ietf.org/doc/html/rfc8288

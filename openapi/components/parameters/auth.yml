@@ -1,0 +1,57 @@
+Scope:
+  name: scope
+  in: query
+  description: Access Token Scope
+  required: false
+  style: spaceDelimited
+  explode: false
+  schema:
+    type: array
+    items:
+      description: case-sensitive.
+      type: string
+      nullable: false
+    externalDocs:
+      descriptopn: "RFC 6749 - The OAuth 2.0 Authorization Framework"
+      url: https://datatracker.ietf.org/doc/html/rfc6749#section-3.3
+  example:
+    - read
+    - write
+
+CodeChallenge:
+  name: code_challenge
+  in: query
+  description: |-
+      A value derived from A code verifier.  
+      When obtaining a token, the authorization server **challenges** whether this value matches the code verifier.
+      - This param is used only for Authorization Code Grant.
+      - This param is required in Authorization Code Grant.
+  required: false
+  schema:
+    type: string
+    pattern: "^[A-Za-z0-9\\-\\.\\_\\~]{43,128}$"
+    minLength: 43
+    maxLength: 128
+    nullable: false
+    example: "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM"
+    externalDocs:
+      descriptopn: "RFC 7636 - Proof Key for Code Exchange by OAuth Public Clients"
+      url: https://datatracker.ietf.org/doc/html/rfc7636#section-4.2
+CodeChallengeMethod:
+  name: code_challenge_method
+  in: query
+  description: |-
+      The method used to derive the code challenge from the code verifier.
+      - This param is used only for Authorization Code Grant.
+  required: false
+  schema:
+    type: string
+    enum:
+      - plain
+      - S256
+    nullable: false
+    default: plain
+    example: S256
+    externalDocs:
+      descriptopn: "RFC 7636 - Proof Key for Code Exchange by OAuth Public Clients"
+      url: https://datatracker.ietf.org/doc/html/rfc7636#section-4.3

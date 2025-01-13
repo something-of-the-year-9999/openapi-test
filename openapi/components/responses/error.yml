@@ -1,0 +1,63 @@
+400:
+  description: Bad Request
+  content:
+    application/problem+json:
+      schema:
+        $ref: "../schemas/error.yml#/ProblemDetail"
+      example:
+        title: "Invalid request."
+        status: 400
+401:
+  description: Unauthorized
+  content:
+    application/problem+json:
+      schema:
+        $ref: "../schemas/error.yml#/ProblemDetail"
+      example:
+        title: "Authentication failed."
+        status: 401
+403:
+  description: Forbidden
+  content:
+    application/problem+json:
+      schema:
+        $ref: "../schemas/error.yml#/ProblemDetail"
+      example:
+        title: "Access denied."
+        status: 403
+404:
+  description: Not Found
+  content:
+    application/problem+json:
+      schema:
+        $ref: "../schemas/error.yml#/ProblemDetail"
+      example:
+        title: "Resource not found."
+        status: 404
+405:
+  description: Method Not Allowed
+  content:
+    application/problem+json:
+      schema:
+        $ref: "../schemas/error.yml#/ProblemDetail"
+      example:
+        title: "Method not allowed."
+        status: 405
+409:
+  description: Conflict
+  content:
+    application/problem+json:
+      schema:
+        $ref: "../schemas/error.yml#/ProblemDetail"
+      example:
+        title: "Resource conflict."
+        status: 409
+422:
+  description: Unprocessable Entity
+  content:
+    application/problem+json:
+      schema:
+        $ref: "../schemas/error.yml#/ProblemDetail"
+      example:
+        title: "Unprocessable entity."
+        status: 422

@@ -1,0 +1,121 @@
+openapi: 3.0.3
+info:
+  title: Sample API
+  description: |-
+      This API serves as a sample to compare the visual and structural differences between various API documentation generation tools.  
+      By using the same OAS file, this API allows users to observe how different tools interpret and present the documentation.
+  termsOfService: https://example.com/terms
+  contact:
+    name: API Support
+    url: https://www.example.com/support
+    email: support@example.com
+  license:
+    name: The Unlicense
+    url: https://unlicense.org
+  version: 1.0.0
+servers:
+  - url: http://localhost:{port}/{basePath}
+    description: Local Server
+    variables:
+      port:
+        # No enum here means it is an open value.
+        default: '8080'
+        description: Port Number
+      basePath:
+        enum:
+          - api
+        default: api
+  - url: https://www.example.com/{basePath}
+    description: Example API Server
+    variables:
+      basePath:
+        enum:
+          - api
+        default: api
+components:
+  securitySchemes:
+    CookieAuth:
+      type: apiKey
+      name: SID
+      in: cookie
+      description: |-
+          To authenticate requests, include a Cookie header with a `SID` cookie-name as part of a cookie-pair.  
+          The cookie-value of the `SID` cookie must contain the Session ID obtained during login.
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: "[RFC 7617 - The 'Basic' HTTP Authentication Scheme](https://datatracker.ietf.org/doc/html/rfc7617)"
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |-
+          - This scheme requires to include an access token in the [Authorization](https://datatracker.ietf.org/doc/html/rfc9110#section-11.6.2) header, formatted as "Bearer {access_token}".  
+          In Swagger UI, simply enter "{access_token}".  
+          - [When a 401 error is returned, `WWW-Authenticate` response header is included.](https://datatracker.ietf.org/doc/html/rfc6750#section-3)
+          - Bearer token is originally intended for authorization, not authentication.  
+          However, some small systems determine access based on the presence of it.
+    OAuth2:
+      type: oauth2
+      description: |-
+          - [When a 401 error is returned, `WWW-Authenticate` response header is included.](https://datatracker.ietf.org/doc/html/rfc6750#section-3)
+      flows:
+        authorizationCode:
+          authorizationUrl: https://example.com/oauth2/authorize
+          tokenUrl: https://example.com/oauth2/token
+          refreshUrl: https://example.com/oauth2/token
+          scopes:
+            read: "Allows read access"
+            write: "Allows write access"
+        implicit:
+          authorizationUrl: https://example.com/oauth2/authorize
+          scopes:
+            read: "Allows read access"
+            write: "Allows write access"
+        password:
+          tokenUrl: https://example.com/oauth2/token
+          refreshUrl: https://example.com/oauth2/token
+          scopes:
+            read: "Allows read access"
+            write: "Allows write access"
+        clientCredentials:
+          tokenUrl: https://example.com/oauth2/token
+          scopes:
+            read: "Allows read access"
+            write: "Allows write access"
+tags:
+  - name: cookie
+    description: Authenticates using a cookie.
+  - name: oauth2
+    description: Authorizes using a OAuth 2.0.
+  - name: callback
+    description: Operations involving out-of-band callbacks.
+  - name: user
+    description: Operates on a single user.
+  - name: users
+    description: Operates on multi users.
+paths:
+  /hello:
+    $ref: "./paths/hello.yml#/Hello"
+  /trace:
+    $ref: "./paths/trace.yml#/Trace"
+  /cookie/login:
+    $ref: "./paths/cookie.yml#/CookieLogin"
+  /cookie/logout:
+    $ref: "./paths/cookie.yml#/CookieLogout"
+  /oauth2/authorize:
+    $ref: "./paths/oauth2.yml#/Oauth2Authorize"
+  /oauth2/token:
+    $ref: "./paths/oauth2.yml#/Oauth2Token"
+  /oauth2/revoke:
+    $ref: "./paths/oauth2.yml#/Oauth2Revoke"
+  /oauth2/introspect:
+    $ref: "./paths/oauth2.yml#/Oauth2Introspect"
+  /tasks:
+    $ref: "./paths/tasks.yml#/Tasks"
+  /tasks/{id}:
+    $ref: "./paths/tasks.yml#/TasksId"
+  /users/{id}:
+    $ref: "./paths/users.yml#/UsersId"
+  /users:
+    $ref: "./paths/users.yml#/Users"

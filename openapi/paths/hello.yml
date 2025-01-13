@@ -1,0 +1,15 @@
+Hello:
+  # /hello
+  get:
+    summary: Hello World Request
+    description: This request returns a simple "Hello, World!" text message.
+    operationId: getHelloWorld
+    responses:
+      "200":
+        description: OK
+        content:
+          text/plain:
+            schema:
+              description: A simple greeting.
+              type: string
+              example: "Hello, World!"

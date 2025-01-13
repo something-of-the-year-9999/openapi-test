@@ -1,0 +1,182 @@
+ClientId:
+  description: Client Identifier
+  type: string
+  nullable: false
+  example: s6BhdRkqt3
+  externalDocs:
+    descriptopn: "RFC 6749 - The OAuth 2.0 Authorization Framework"
+    url: https://datatracker.ietf.org/doc/html/rfc6749#section-2.3.1
+ClientSecret:
+  description: The client secret.
+  type: string
+  nullable: true
+  example: 7Fjfp0ZBr1KtDRbnfVdmIw
+  externalDocs:
+    descriptopn: "RFC 6749 - The OAuth 2.0 Authorization Framework"
+    url: https://datatracker.ietf.org/doc/html/rfc6749#section-2.3.1
+RedirectUri:
+  description: The redirect URI used in the authorization request.
+  type: string
+  nullable: false
+  example: https%3A%2F%2Fexample%2Ecom%2Fclient
+  externalDocs:
+    descriptopn: "RFC 6749 - The OAuth 2.0 Authorization Framework"
+    url: https://datatracker.ietf.org/doc/html/rfc6749#section-3.1.2.3
+Scope:
+  description: |-
+      Access Token Scope
+      - The value is expressed as a list of space-delimited, case-sensitive strings.
+  type: string
+  nullable: false
+  example: "read write"
+  externalDocs:
+    descriptopn: "RFC 6749 - The OAuth 2.0 Authorization Framework"
+    url: https://datatracker.ietf.org/doc/html/rfc6749#section-3.3
+Username:
+  description: The resource owner username.
+  type: string
+  nullable: false
+  example: "Jane Smith"
+  externalDocs:
+    descriptopn: "RFC 6749 - The OAuth 2.0 Authorization Framework"
+    url: https://datatracker.ietf.org/doc/html/rfc6749#section-4.3.2
+RefreshToken:
+  # The format of refresh token is not defined by RFC.
+  description: This token can be used to obtain new access tokens.
+  type: string
+  nullable: false
+  example: tGzv3JOkF0XG5Qx2TlKWIA
+  externalDocs:
+    descriptopn: "RFC 6749 - The OAuth 2.0 Authorization Framework"
+    url: https://datatracker.ietf.org/doc/html/rfc6749#section-6
+TokenType:
+  description: Access Token Type
+  type: string
+  enum:
+    - Bearer
+  nullable: false
+  example: Bearer
+  externalDocs:
+    descriptopn: "RFC 6749 - The OAuth 2.0 Authorization Framework"
+    url: https://datatracker.ietf.org/doc/html/rfc6749#section-7.1
+
+TokenTypeHint:
+  description: |-
+      A hint about the type of token submitted for revocation.  
+      This helps the server to process the token more efficiently.
+  type: string
+  enum:
+    - access_token
+    - refresh_token
+  nullable: false
+  example: access_token
+  externalDocs:
+    descriptopn: "RFC 7009 - OAuth 2.0 Token Revocation"
+    url: https://datatracker.ietf.org/doc/html/rfc7009#section-4.1.2
+
+JWT:
+  description: JSON Web Token
+  type: string
+  pattern: "^[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$"
+  example: "mF_9.B5f-4.1JqM"
+  externalDocs:
+    description: RFC 7519 - JSON Web Token (JWT)
+    url: https://datatracker.ietf.org/doc/html/rfc7519
+ISS:
+  description: |-
+    **Iss**uer  
+    This claim identifies the principal that issued the JWT.  
+    This value is a case-sensitive string containing a string or uri value.
+  type: string
+  nullable: false
+  example: https://example.com/server
+  externalDocs:
+    descriptopn: RFC 7519 - JSON Web Token (JWT)
+    url: https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.1
+SUB:
+  description: |-
+      **Sub**ject  
+      A machine-readable identifier of the resource owner who authorized this token.  
+      This value is a case-sensitive string containing a string or uri value.
+  type: string
+  nullable: false
+  example: Z5O3upPC88QrAjx00dis
+  externalDocs:
+    descriptopn: RFC 7519 - JSON Web Token (JWT)
+    url: https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.2
+AUD:
+  description: |-
+      **Aud**ience  
+      Service-specific string identifier or list of string identifiers representing the intended audience for this token.  
+      Each principal intended to process the JWT MUST identify itself with a value in this claim.  
+      If the principal processing the claim does not identify itself with a value in this claim when this claim is present, then the JWT MUST be rejected.
+  type: string
+  nullable: false
+  example: https://example.com/protected/resource
+  externalDocs:
+    descriptopn: RFC 7519 - JSON Web Token (JWT)
+    url: https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.3
+EXP:
+  description: |-
+      **Exp**iration Time  
+      A timestamp measured in seconds since January 1, 1970, UTC.  
+      This claim identifies the expiration time on or after which the JWT MUST NOT be accepted for processing.  
+      The processing of this claim requires that the current date/time MUST be before the expiration date/time listed in this claim.
+  type: integer
+  format: int64
+  nullable: false
+  example: 1419356238
+  externalDocs:
+    descriptopn: RFC 7519 - JSON Web Token (JWT)
+    url: https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.4
+NBF:
+  description: |-
+      **N**ot **B**e**f**ore  
+      A timestamp measured in seconds since January 1, 1970, UTC.  
+      This claim identifies the time before which the JWT MUST NOT be accepted for processing.  
+      The processing of this claim requires that the current date/time MUST be after or equal to the not-before date/time listed in this claim.
+  type: integer
+  format: int64
+  nullable: false
+  example: 1419349238
+  externalDocs:
+    descriptopn: RFC 7519 - JSON Web Token (JWT)
+    url: https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.5
+IAT:
+  description: |-
+      **I**ssued **At**  
+      A timestamp measured in seconds since January 1, 1970, UTC.  
+      This claim identifies the time at which the JWT was issued, and can be used to determine the age of the JWT.
+  type: integer
+  format: int64
+  nullable: false
+  example: 1419350238
+  externalDocs:
+    descriptopn: RFC 7519 - JSON Web Token (JWT)
+    url: https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.6
+JTI:
+  description: |-
+      **J**W**T** **I**D  
+      Identifier for the token.  
+      This value MUST be assigned in a manner that ensures that there is a negligible probability that the same value will be accidentally assigned to a different data object.  
+      If the application uses multiple issuers, collisions MUST be prevented among values produced by different issuers as well.  
+      This claim can be used to prevent the JWT from being replayed.  
+      This value is a case-sensitive.
+  type: string
+  nullable: false
+  example: 8f4e86d7-17b1-4a0c-9e94-3c3f07259e1a
+  externalDocs:
+    descriptopn: RFC 7519 - JSON Web Token (JWT)
+    url: https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.7
+
+CodeVerifier:
+  description: A string used to correlate the authorization request and token request in PKCE.
+  type: string
+  pattern: "^[A-Za-z0-9\\-\\.\\_\\~]{43,128}$"
+  minLength: 43
+  maxLength: 128
+  nullable: false
+  example: "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk"
+  externalDocs:
+    descriptopn: "RFC 7636 - Proof Key for Code Exchange by OAuth Public Clients"
+    url: https://datatracker.ietf.org/doc/html/rfc7636#section-4.5

@@ -1,0 +1,68 @@
+Has2fa:
+  name: has_2fa
+  in: query
+  description: Indicates if the user has enabled 2-Factor Authentication.
+  required: false
+  schema:
+    $ref: "../schemas/user.yml#/Has2fa"
+Gender:
+  name: gender
+  in: query
+  description: User Gender
+  required: false
+  schema:
+    $ref: "../schemas/user.yml#/Gender"
+HeightFrom:
+  name: height_from
+  in: query
+  description: |-
+      User Height in Centimeter  
+      Retrieve resources with values equal to this param as well.
+  required: false
+  schema:
+    $ref: "../schemas/user.yml#/Height"
+HeightTo:
+  name: height_to
+  in: query
+  description: |-
+      User Height in Centimeter  
+      Retrieve resources with values equal to this param as well.
+  required: false
+  schema:
+    $ref: "../schemas/user.yml#/Height"
+WeightFrom:
+  name: weight_from
+  in: query
+  description: |-
+      User Weight in Kilograms  
+      Retrieve resources with values equal to this param as well.
+  required: false
+  schema:
+    $ref: "../schemas/user.yml#/Weight"
+WeightTo:
+  name: weight_to
+  in: query
+  description: |-
+      User Weight in Kilograms  
+      Retrieve resources with values equal to this param as well.
+  required: false
+  schema:
+    $ref: "../schemas/user.yml#/Weight"
+RegistrationDateTimeFrom:
+  name: registration_date_time_from
+  in: query
+  description: |-
+      The date-time when the user registered.  
+      Retrieve resources with values equal to this param as well.
+  required: false
+  schema:
+    $ref: "../schemas/user.yml#/RegistrationDateTime"
+RegistrationDateTimeTo:
+  name: registration_date_time_to
+  in: query
+  description: |-
+      The date-time when the user registered.  
+      Retrieve resources with values equal to this param as well.
+  required: false
+  schema:
+    $ref: "../schemas/user.yml#/RegistrationDateTime"

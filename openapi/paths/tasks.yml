@@ -1,0 +1,114 @@
+Tasks:
+  # /tasks
+  description: "[OpenAPI Specification v3.0.3 Callback Object](https://spec.openapis.org/oas/v3.0.3.html#callback-object)"
+  post:
+    tags:
+      - callback
+    summary: Create Async Task Request
+    description: Creates a task that operates asynchronously and sends a notification upon completion.
+    operationId: postTask
+    security:
+      - BearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              task_data:
+                description: The content of the task to be created.
+                nullable: false
+                example: "Something Task Data."
+              callback_url:
+                description: Webhook URL to receive task completion notifications.
+                type: string
+                nullable: false
+                example: "https://example.com/webhooks/tasks"
+            required:
+              - task_data
+    responses:
+      "201":
+        description: Created
+        headers:
+          Location:
+            description: "[RFC 9110 - HTTP Semantics](https://datatracker.ietf.org/doc/html/rfc9110#section-10.2.2)"
+            required: true
+            schema:
+              type: string
+              nullable: false
+            example: "https://example.com/api/tasks/1"
+        content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    $ref: "../components/schemas/task.yml#/Id"
+                required:
+                  - id
+      "400":
+        $ref: "../components/responses/error.yml#/400"
+      "401":
+        $ref: "../components/responses/error.yml#/401"
+    callbacks:
+      taskCompletionCallback:
+        '{$request.body#/callback_url}':
+          post:
+            summary: Task Completion Notification Request
+            description: Notifies when the task is completed.
+            requestBody:
+              required: true
+              content:
+                application/json:
+                  schema:
+                    allOf:
+                      - $ref: "../components/schemas/task.yml#/Task"
+                      - required:
+                        - id
+                        - status
+                        - accepted_time
+                        - completed_time
+            responses:
+              "204":
+                description: No Content
+              "400":
+                $ref: "../components/responses/error.yml#/400"
+
+TasksId:
+  # /tasks/{id}
+  parameters:
+    # If in is "path", the name field MUST correspond to a template expression occurring within the path field in the Paths Object.
+    - name: id
+      in: path
+      description: The unique identifier of the task.
+      # If the parameter location is "path", this property is REQUIRED and its value MUST be true.
+      required: true
+      schema:
+        $ref: "../components/schemas/task.yml#/Id"
+  get:
+    tags:
+      - callback
+    summary: Task Retrieval Request
+    description: Retrieves the progress and details of specified async task.
+    operationId: getTaskById
+    security:
+      - BearerAuth: []
+    responses:
+      "200":
+        description: OK
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../components/schemas/task.yml#/Task"
+                - required:
+                  - id
+                  - status
+                  - accepted_time
+      "400":
+        $ref: "../components/responses/error.yml#/400"
+      "401":
+        $ref: "../components/responses/error.yml#/401"
+      "404":
+        $ref: "../components/responses/error.yml#/404"

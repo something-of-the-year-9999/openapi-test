@@ -1,0 +1,388 @@
+Users:
+  # /users
+  # The PUT request will not be implemented because it cannot distinguish between 200 (Updated) and 201 (Created) responses.
+  # The PATCH method will not be implemented to avoid specifying an id (which is read-only) in the request body.
+  summary: Multi Users or Unregistered User Operations Endpoint
+  description: |-
+      This endpoint provides operations for managing user resources within the system.  
+      It allows for interaction with user data, supporting actions to manage and manipulate multiple users.  
+      These operations ensure flexible and efficient user management, catering to various user-related use cases.
+  get:
+    tags:
+      - users
+    summary: Users Retrieval Request
+    description: Retrieves a list of user.
+    operationId: getUsers
+    security:
+      - OAuth2: ["read"]
+    parameters:
+      - $ref: "../components/parameters/pagination.yml#/Page"
+      - $ref: "../components/parameters/pagination.yml#/PerPage"
+      - $ref: "../components/parameters/user.yml#/Has2fa"
+      - $ref: "../components/parameters/user.yml#/Gender"
+      - $ref: "../components/parameters/user.yml#/HeightFrom"
+      - $ref: "../components/parameters/user.yml#/HeightTo"
+      - $ref: "../components/parameters/user.yml#/WeightFrom"
+      - $ref: "../components/parameters/user.yml#/WeightTo"
+      - $ref: "../components/parameters/user.yml#/RegistrationDateTimeFrom"
+      - $ref: "../components/parameters/user.yml#/RegistrationDateTimeTo"
+    responses:
+      "200":
+        description: OK
+        headers:
+          Link:
+            $ref: "../components/headers/pagination.yml#/Pagination"
+        content:
+          application/json:
+            schema:
+              description: The array of objects to be retrieved.
+              type: array
+              items:
+                allOf:
+                  - $ref: "../components/schemas/user.yml#/User"
+                  - required:
+                    - id
+                    - name
+                    - email
+                    - has_2fa
+                    - dob
+                    - gender
+                    - height
+                    - weight
+                    - registration_date_time
+              externalDocs:
+                # Array is one of the data types defined as JSON text.
+                description: RFC 8259 - The JavaScript Object Notation (JSON) Data Interchange Format
+                url: https://datatracker.ietf.org/doc/html/rfc8259
+      "400":
+        $ref: "../components/responses/error.yml#/400"
+      "401":
+        $ref: "../components/responses/error.yml#/401"
+      "403":
+        $ref: "../components/responses/error.yml#/403"
+  head:
+    tags:
+      - users
+    summary: Users Resource Availability Check Request
+    description: Returns headers to verify if the user list resource is available without returning the resource.
+    operationId: headUsers
+    security:
+      - OAuth2: ["read"]
+    parameters:
+      - $ref: "../components/parameters/pagination.yml#/Page"
+      - $ref: "../components/parameters/pagination.yml#/PerPage"
+      - $ref: "../components/parameters/user.yml#/Has2fa"
+      - $ref: "../components/parameters/user.yml#/Gender"
+      - $ref: "../components/parameters/user.yml#/HeightFrom"
+      - $ref: "../components/parameters/user.yml#/HeightTo"
+      - $ref: "../components/parameters/user.yml#/WeightFrom"
+      - $ref: "../components/parameters/user.yml#/WeightTo"
+      - $ref: "../components/parameters/user.yml#/RegistrationDateTimeFrom"
+      - $ref: "../components/parameters/user.yml#/RegistrationDateTimeTo"
+    responses:
+      "200":
+        description: OK
+        headers:
+          Link:
+            $ref: "../components/headers/pagination.yml#/Pagination"
+      "400":
+        $ref: "../components/responses/error.yml#/400"
+      "401":
+        $ref: "../components/responses/error.yml#/401"
+      "403":
+        $ref: "../components/responses/error.yml#/403"
+  post:
+    tags:
+      - user
+    summary: User Creation Request
+    description: |-
+        Creates new user.  
+        If any optional fields are omitted when creating users, default values will be applied automatically.
+    operationId: postUsers
+    security:
+      - OAuth2: ["write"]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "../components/schemas/user.yml#/User"
+              - required:
+                - name
+                - email
+                - password
+    responses:
+      "201":
+        description: Created
+        headers:
+          Location:
+            description: "[RFC 9110 - HTTP Semantics](https://datatracker.ietf.org/doc/html/rfc9110#section-10.2.2)"
+            required: true
+            schema:
+              type: string
+              nullable: false
+            example: "https://example.com/api/users/1"
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../components/schemas/user.yml#/User"
+                - required:
+                  - id
+                  - name
+                  - email
+                  - has_2fa
+                  - dob
+                  - gender
+                  - height
+                  - weight
+                  - registration_date_time
+        links:
+          getUser:
+            operationId: getUserById
+            parameters:
+              path.id: $response.body#/id
+          upsertUser:
+            operationId: putUserById
+            parameters:
+              path.id: $response.body#/id
+          updateUser:
+            operationId: patchUserById
+            parameters:
+              path.id: $response.body#/id
+          deleteUser:
+            operationId: deleteUserById
+            parameters:
+              path.id: $response.body#/id
+      "400":
+        $ref: "../components/responses/error.yml#/400"
+      "401":
+        $ref: "../components/responses/error.yml#/401"
+      "403":
+        $ref: "../components/responses/error.yml#/403"
+  delete:
+    tags:
+      - users
+    summary: Users Deletion Request
+    description: |-
+        Deletes the users with the specified ids.  
+        Once deleted, the users cannot be recovered.  
+        This request is performed atomically, meaning they either all succeed or none are applied.  
+        Return a 404 error if at least one of the specified users is not found.
+    operationId: deleteUsers
+    security:
+      - OAuth2: ["write"]
+    parameters:
+      - name: ids
+        in: query
+        description: A list of ids to identify the users.
+        required: true
+        schema:
+          type: array
+          items:
+            $ref: "../components/schemas/user.yml#/Id"
+          minItems: 1
+          maxItems: 100
+          uniqueItems: true
+        example:
+          - 1
+          - 2
+    responses:
+      "204":
+        description: No Content
+      "400":
+        $ref: "../components/responses/error.yml#/400"
+      "401":
+        $ref: "../components/responses/error.yml#/401"
+      "403":
+        $ref: "../components/responses/error.yml#/403"
+
+UsersId:
+  # /users/{id}
+  summary: Single User Operations Endpoint
+  description: |-
+      This endpoint provides operations for managing a specific user resource identified by a unique id.  
+      The id is supplied as a path parameter, and it represents a user within the system.  
+      Various actions can be performed to manipulate the user's data, ensuring flexible control over user management.
+  parameters:
+    # If in is "path", the name field MUST correspond to a template expression occurring within the path field in the Paths Object.
+    - name: id
+      in: path
+      description: The unique identifier of the user.
+      # If the parameter location is "path", this property is REQUIRED and its value MUST be true.
+      required: true
+      schema:
+        $ref: "../components/schemas/user.yml#/Id"
+  get:
+    tags:
+      - user
+    summary: User Retrieval Request
+    description: |-
+        Retrieves a specific user by their unique id.  
+        This method returns the full profile and related information of the user identified by the provided id.
+    operationId: getUserById
+    security:
+      - OAuth2: ["read"]
+    responses:
+      "200":
+        description: OK
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../components/schemas/user.yml#/User"
+                - required:
+                  - id
+                  - name
+                  - email
+                  - has_2fa
+                  - dob
+                  - gender
+                  - height
+                  - weight
+                  - registration_date_time
+      "400":
+        $ref: "../components/responses/error.yml#/400"
+      "401":
+        $ref: "../components/responses/error.yml#/401"
+      "403":
+        $ref: "../components/responses/error.yml#/403"
+      "404":
+        $ref: "../components/responses/error.yml#/404"
+  put:
+    tags:
+      - user
+    summary: User Update or Creation Request
+    description: |-
+        Updates an existing user identified by their unique id.  
+        If the user does not exist, a new user resource will be created with the provided information.  
+        200 OK response will be returned if the resource is updated, and 201 Created response will be returned if a new resource is created.  
+        If a soft-deleted resource is specified, 409 Conflict error will be returned.
+    operationId: putUserById
+    security:
+      - OAuth2: ["write"]
+    requestBody:
+      description: Any attributes not provided in the request body will be updated or created with default values.
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "../components/schemas/user.yml#/User"
+              - minProperties: 1
+    responses:
+      "200":
+        description: OK
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../components/schemas/user.yml#/User"
+                - required:
+                  - id
+                  - name
+                  - email
+                  - has_2fa
+                  - dob
+                  - gender
+                  - height
+                  - weight
+                  - registration_date_time
+      "201":
+        description: Created
+        headers:
+          Location:
+            description: "[RFC 9110 - HTTP Semantics](https://datatracker.ietf.org/doc/html/rfc9110#section-10.2.2)"
+            required: true
+            schema:
+              type: string
+              nullable: false
+            example: "https://example.com/api/users/1"
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../components/schemas/user.yml#/User"
+                - required:
+                  - id
+                  - name
+                  - email
+                  - has_2fa
+                  - dob
+                  - gender
+                  - height
+                  - weight
+                  - registration_date_time
+      "400":
+        $ref: "../components/responses/error.yml#/400"
+      "401":
+        $ref: "../components/responses/error.yml#/401"
+      "403":
+        $ref: "../components/responses/error.yml#/403"
+      "409":
+        $ref: "../components/responses/error.yml#/409"
+  patch:
+    tags:
+      - user
+    summary: User Partial Update Request
+    description: Partially updates the user identified by their unique id.
+    operationId: patchUserById
+    security:
+      - OAuth2: ["write"]
+    requestBody:
+      description: Any attributes not provided in the request body will not be updated.
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "../components/schemas/user.yml#/User"
+              - minProperties: 1
+    responses:
+      "200":
+        description: OK
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "../components/schemas/user.yml#/User"
+                - required:
+                  - id
+                  - name
+                  - email
+                  - has_2fa
+                  - dob
+                  - gender
+                  - height
+                  - weight
+                  - registration_date_time
+      "400":
+        $ref: "../components/responses/error.yml#/400"
+      "401":
+        $ref: "../components/responses/error.yml#/401"
+      "403":
+        $ref: "../components/responses/error.yml#/403"
+      "404":
+        $ref: "../components/responses/error.yml#/404"
+  delete:
+    tags:
+      - user
+    summary: User Deletion Request
+    description: |-
+        Deletes the user identified by the provided id.  
+        Once deleted, the user cannot be recovered.
+    operationId: deleteUserById
+    security:
+      - OAuth2: ["write"]
+    responses:
+      "204":
+        description: No Content
+      "400":
+        $ref: "../components/responses/error.yml#/400"
+      "401":
+        $ref: "../components/responses/error.yml#/401"
+      "403":
+        $ref: "../components/responses/error.yml#/403"
+      "404":
+        $ref: "../components/responses/error.yml#/404"

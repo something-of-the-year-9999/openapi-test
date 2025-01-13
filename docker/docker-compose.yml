@@ -1,0 +1,29 @@
+services:
+  redoc:
+    image: redocly/redoc:v2.2.0
+    environment:
+      SPEC_URL: ./oas/openapi.yml
+    ports:
+      - "${REDOC_HOST_PORT}:80"
+    volumes:
+      - ../openapi:/usr/share/nginx/html/oas
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "2"
+        compress: "true"
+  swagger-ui:
+    image: swaggerapi/swagger-ui:v5.17.14
+    environment:
+      SWAGGER_JSON: /oas/openapi.yml
+    ports:
+      - "${SWAGGER_UI_HOST_PORT}:8080"
+    volumes:
+      - ../openapi:/oas
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "2"
+        compress: "true"

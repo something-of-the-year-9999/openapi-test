@@ -1,0 +1,53 @@
+Date:
+  type: string
+  # As defined by full-date on RFC 3339.
+  format: date
+  # It's based on ISO 8601.
+  pattern: "^\\d{4}-\\d{2}-\\d{2}$"
+  externalDocs:
+    description: RFC 3339 - Date and Time on the Internet
+    url: https://datatracker.ietf.org/doc/html/rfc3339
+DateTime:
+  # oneOf:
+  #   - type: string
+  #     format: date-time
+  #     pattern: "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
+  #     example: "2022-05-22T22:05:22Z"
+  #   - type: string
+  #     format: date-time
+  #     pattern: "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}[+-]\\d{2}:\\d{2}$"
+  #     example: "2022-05-22T22:05:22-05:00"
+  type: string
+  # As defined by date-time on RFC 3339.
+  format: date-time
+  # It's based on ISO 8601.
+  pattern: "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}[+-]\\d{2}:\\d{2}$"
+  # example: "2022-05-22T22:05:22-05:00"
+  externalDocs:
+    description: RFC 3339 - Date and Time on the Internet
+    url: https://datatracker.ietf.org/doc/html/rfc3339
+
+EMail:
+  type: string
+  maxLength: 254
+  externalDocs:
+    description: RFC 5321 - Simple Mail Transfer Protocol
+    url: https://datatracker.ietf.org/doc/html/rfc5321
+
+Password:
+  type: string
+  format: password
+  minLength: 8
+  example: "G7f!k9vQz@rP4w$"
+  writeOnly: true
+  externalDocs:
+    description: NIST Special Publication 800-63B
+    url: https://pages.nist.gov/800-63-3/sp800-63b.html
+
+Id:
+  type: integer
+  format: int64
+  minimum: 0
+  exclusiveMinimum: true
+  nullable: false
+  example: 1
